@@ -1,0 +1,83 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // Default deny all
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    // Helper functions
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function isOwner(userId) {
+      return isSignedIn() && request.auth.uid == userId;
+    }
+
+    function isValidId(id) {
+      return id is string && id.size() <= 128 && id.matches('^[a-zA-Z0-9_\\-]+$');
+    }
+
+    function incoming() {
+      return request.resource.data;
+    }
+
+    function existing() {
+      return resource.data;
+    }
+
+    // Validation for UserProfile
+    function isValidUserProfile(data, userId) {
+      return data.keys().hasAll(['id', 'email', 'createdAt']) &&
+        data.keys().hasOnly(['id', 'email', 'displayName', 'photoUrl', 'createdAt']) &&
+        data.id is string && data.id == userId && data.id.size() <= 128 &&
+        data.email is string && data.email.size() <= 256 &&
+        (!('displayName' in data) || (data.displayName is string && data.displayName.size() <= 100)) &&
+        (!('photoUrl' in data) || (data.photoUrl is string && data.photoUrl.size() <= 500)) &&
+        data.createdAt is string && data.createdAt.size() <= 50;
+    }
+
+    // Validation for UserStudyNote
+    function isValidUserStudyNote(data, userId) {
+      return data.keys().hasAll(['id', 'userId', 'title', 'sourceType', 'sourceName', 'notePayload', 'createdAt']) &&
+        data.keys().hasOnly(['id', 'userId', 'title', 'sourceType', 'sourceName', 'sourceUrlOrInfo', 'style', 'academicLevel', 'executiveSummary', 'notePayload', 'createdAt', 'updatedAt']) &&
+        data.id is string && data.id.size() <= 128 &&
+        data.userId is string && data.userId == userId && data.userId == request.auth.uid &&
+        data.title is string && data.title.size() > 0 && data.title.size() <= 300 &&
+        data.sourceType is string && data.sourceType.size() <= 50 &&
+        data.sourceName is string && data.sourceName.size() <= 300 &&
+        (!('sourceUrlOrInfo' in data) || (data.sourceUrlOrInfo is string && data.sourceUrlOrInfo.size() <= 1000)) &&
+        (!('style' in data) || (data.style is string && data.style.size() <= 50)) &&
+        (!('academicLevel' in data) || (data.academicLevel is string && data.academicLevel.size() <= 50)) &&
+        (!('executiveSummary' in data) || (data.executiveSummary is string && data.executiveSummary.size() <= 5000)) &&
+        data.notePayload is string && data.notePayload.size() <= 500000 &&
+        data.createdAt is string && data.createdAt.size() <= 50 &&
+        (!('updatedAt' in data) || (data.updatedAt is string && data.updatedAt.size() <= 50));
+    }
+
+    // User Profile Document
+    match /users/{userId} {
+      allow get: if isOwner(userId) && isValidId(userId);
+      allow list: if false; // Users cannot list other users
+      allow create: if isOwner(userId) && isValidId(userId) && isValidUserProfile(incoming(), userId);
+      allow update: if isOwner(userId) && isValidId(userId) && isValidUserProfile(incoming(), userId) &&
+        incoming().id == existing().id &&
+        incoming().createdAt == existing().createdAt;
+      allow delete: if isOwner(userId) && isValidId(userId);
+
+      // User Study Notes Subcollection: Every user has their own isolated personal database and history
+      match /notes/{noteId} {
+        allow get: if isOwner(userId) && isValidId(userId) && isValidId(noteId);
+        allow list: if isOwner(userId) && isValidId(userId);
+        allow create: if isOwner(userId) && isValidId(userId) && isValidId(noteId) && isValidUserStudyNote(incoming(), userId);
+        allow update: if isOwner(userId) && isValidId(userId) && isValidId(noteId) && isValidUserStudyNote(incoming(), userId) &&
+          incoming().id == existing().id &&
+          incoming().userId == existing().userId &&
+          incoming().createdAt == existing().createdAt;
+        allow delete: if isOwner(userId) && isValidId(userId) && isValidId(noteId);
+      }
+    }
+  }
+}

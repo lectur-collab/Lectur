@@ -1,0 +1,115 @@
+{
+  "entities": {
+    "UserProfile": {
+      "title": "UserProfile",
+      "description": "User account profile document storing user identity details.",
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique user identification string matching the Firebase Auth UID.",
+          "maxLength": 128
+        },
+        "email": {
+          "type": "string",
+          "description": "User email address.",
+          "maxLength": 256
+        },
+        "displayName": {
+          "type": "string",
+          "description": "User display name.",
+          "maxLength": 100
+        },
+        "photoUrl": {
+          "type": "string",
+          "description": "User profile avatar URL.",
+          "maxLength": 500
+        },
+        "createdAt": {
+          "type": "string",
+          "description": "ISO timestamp of user creation.",
+          "maxLength": 50
+        }
+      },
+      "required": ["id", "email", "createdAt"]
+    },
+    "UserStudyNote": {
+      "title": "UserStudyNote",
+      "description": "Personal study note document created by the user from YouTube lectures or documents.",
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique study note document identifier.",
+          "maxLength": 128
+        },
+        "userId": {
+          "type": "string",
+          "description": "ID of the user who owns this study note.",
+          "maxLength": 128
+        },
+        "title": {
+          "type": "string",
+          "description": "Title of the lecture or study note.",
+          "maxLength": 300
+        },
+        "sourceType": {
+          "type": "string",
+          "description": "Type of source material.",
+          "enum": ["youtube", "pdf", "document"]
+        },
+        "sourceName": {
+          "type": "string",
+          "description": "Source name or channel name.",
+          "maxLength": 300
+        },
+        "sourceUrlOrInfo": {
+          "type": "string",
+          "description": "URL or information regarding the source lecture.",
+          "maxLength": 1000
+        },
+        "style": {
+          "type": "string",
+          "description": "Note style format.",
+          "maxLength": 50
+        },
+        "academicLevel": {
+          "type": "string",
+          "description": "Target academic difficulty level.",
+          "maxLength": 50
+        },
+        "executiveSummary": {
+          "type": "string",
+          "description": "High-level summary of the lecture.",
+          "maxLength": 5000
+        },
+        "notePayload": {
+          "type": "string",
+          "description": "Serialized JSON string payload containing full sections, flashcards, quiz, timelines, and tips.",
+          "maxLength": 500000
+        },
+        "createdAt": {
+          "type": "string",
+          "description": "Creation timestamp.",
+          "maxLength": 50
+        },
+        "updatedAt": {
+          "type": "string",
+          "description": "Last updated timestamp.",
+          "maxLength": 50
+        }
+      },
+      "required": ["id", "userId", "title", "sourceType", "sourceName", "notePayload", "createdAt"]
+    }
+  },
+  "firestore": {
+    "/users/{userId}": {
+      "schema": "UserProfile",
+      "description": "Collection of individual user profile records restricted to the authenticated user."
+    },
+    "/users/{userId}/notes/{noteId}": {
+      "schema": "UserStudyNote",
+      "description": "Personal database collection of study notes and history isolated per user."
+    }
+  }
+}

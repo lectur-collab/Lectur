@@ -1,0 +1,27 @@
+{
+  "id": "/",
+  "name": "Lectur - AI YouTube Lecture Study Notes",
+  "short_name": "Lectur",
+  "description": "Convert YouTube lectures into comprehensive study notes, topic boxes, formulas, and mentor AI guidance.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "background_color": "#ffffff",
+  "theme_color": "#0f172a",
+  "categories": ["education", "productivity", "utilities"],
+  "icons": [
+    {
+      "src": "/icon.svg",
+      "sizes": "192x192 512x512",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    },
+    {
+      "src": "/icon.svg",
+      "sizes": "512x512",
+      "type": "image/svg+xml",
+      "purpose": "maskable"
+    }
+  ]
+}

@@ -1,0 +1,6 @@
+{
+  "name": "Student Notes & Concept Clarifier",
+  "description": "Convert YouTube educational lectures into structured study notes, topic boxes, key formulas, and instant concept clarifiers.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

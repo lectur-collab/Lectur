@@ -1,0 +1,40 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <defs>
+    <linearGradient id="bg-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0f172a" />
+      <stop offset="100%" stop-color="#1e1b4b" />
+    </linearGradient>
+    <linearGradient id="amber-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#fbbf24" />
+      <stop offset="100%" stop-color="#f59e0b" />
+    </linearGradient>
+    <linearGradient id="indigo-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#818cf8" />
+      <stop offset="100%" stop-color="#6366f1" />
+    </linearGradient>
+  </defs>
+  <!-- Background with squircle safe padding -->
+  <rect width="512" height="512" rx="112" fill="url(#bg-grad)" />
+  
+  <!-- Subtle inner border -->
+  <rect x="16" y="16" width="480" height="480" rx="96" fill="none" stroke="rgba(255,255,255,0.08)" stroke-width="4" />
+
+  <!-- Graduation Cap / Book Symbolism -->
+  <g transform="translate(106, 120)">
+    <!-- Book pages -->
+    <path d="M150 160 C90 120, 20 135, 0 145 L0 270 C25 255, 90 245, 150 280 C210 245, 275 255, 300 270 L300 145 C280 135, 210 120, 150 160 Z" fill="#ffffff" opacity="0.95" />
+    <!-- Book spine divider -->
+    <line x1="150" y1="160" x2="150" y2="280" stroke="#0f172a" stroke-width="6" stroke-linecap="round" />
+    <!-- Knowledge Sparkle Star -->
+    <path d="M150 30 L162 70 L202 82 L162 94 L150 134 L138 94 L98 82 L138 70 Z" fill="url(#amber-grad)" />
+    <!-- Small sparks -->
+    <circle cx="230" cy="50" r="10" fill="#fbbf24" />
+    <circle cx="70" cy="65" r="7" fill="#818cf8" />
+    <!-- YouTube Play Accent on Left Page -->
+    <path d="M60 185 L95 205 L60 225 Z" fill="#ef4444" />
+    <!-- Note checklist lines on Right Page -->
+    <line x1="185" y1="185" x2="255" y2="185" stroke="#6366f1" stroke-width="6" stroke-linecap="round" />
+    <line x1="185" y1="205" x2="245" y2="205" stroke="#6366f1" stroke-width="6" stroke-linecap="round" />
+    <line x1="185" y1="225" x2="230" y2="225" stroke="#6366f1" stroke-width="6" stroke-linecap="round" />
+  </g>
+</svg>
